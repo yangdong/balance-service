@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6fac11cb-d219-4aad-8a3a-8c188787b21e" name="Changes" comment="er">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/balance-service.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/balance-service.ipr" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/balance-service.iws" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/k8s/deployment.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ops.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/performance_test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/BalanceApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/account/AccountErrorCode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/account/controller/AccountController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/account/domain/Account.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/account/domain/AccountRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/account/domain/BalanceLog.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/account/domain/BalanceLogRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/account/service/AccountInfo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/account/service/AccountService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/account/service/LocalAccountService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/common/APIResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/common/CommonErrorCode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/common/ErrorCode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/common/IdGenerator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/common/LockService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/common/NotificationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/common/RedisLockService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/common/Result.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/common/command/CommandReturns.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/common/command/GeneralValidator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/common/command/Required.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/common/command/ResourceCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/common/command/validator/RequiredValidator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/common/command/validator/Validator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/common/command/validator/ValidatorPool.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/config/RedisConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/config/RocketMQConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/ops/controller/HealthCheckController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/ops/controller/OpsController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/ops/service/OpsService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/transaction/controller/TransactionController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/transaction/controller/command/NewTransferCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/transaction/domain/Transaction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/transaction/domain/TransactionIdWithRetryCount.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/transaction/domain/TransactionRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/transaction/error/TransactionErrorCode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/transaction/service/TransactionRecoveryMessage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/transaction/service/TransactionRecoveryProducer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/transaction/service/TransactionService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/transaction/service/TransferRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/transaction/service/TransferResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/transaction/service/tcc/TccTransactionService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/transaction/service/tcc/TransactionContext.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/transaction/service/tcc/TransactionRecoveryWorker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/transaction/service/tcc/UnfinishedTransactionScanner.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/transaction/service/tcc/domain/TCCTransaction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/transaction/service/tcc/domain/TCCTransactionRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/evan/balance/transaction/service/tcc/domain/TCCTransactionStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/evan/balance/account/AccountErrorCodeTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/evan/balance/account/controller/AccountControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/evan/balance/account/domain/AccountTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/evan/balance/account/domain/BalanceLogTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/evan/balance/account/service/LocalAccountServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/evan/balance/command/ResourceCommandTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/evan/balance/common/APIResponseTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/evan/balance/common/LockContextTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/evan/balance/common/RedisLockServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/evan/balance/common/command/GeneralValidatorTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/evan/balance/common/command/validator/RequiredValidatorTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/evan/balance/ops/controller/OpsControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/evan/balance/transaction/controller/TransactionControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/evan/balance/transaction/controller/command/NewTransferCommandTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/evan/balance/transaction/service/tcc/TccTransactionServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/evan/balance/transaction/service/tcc/UnfinishedTransactionScannerTest.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+    <option name="REVERSE_PATCH" value="false" />
+  </component>
+  <component name="DebuggerManager">
+    <breakpoint_any converted="true">
+      <breakpoint>
+        <option name="NOTIFY_CAUGHT" value="true" />
+        <option name="NOTIFY_UNCAUGHT" value="true" />
+        <option name="ENABLED" value="false" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint>
+        <option name="NOTIFY_CAUGHT" value="true" />
+        <option name="NOTIFY_UNCAUGHT" value="true" />
+        <option name="ENABLED" value="false" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+    </breakpoint_any>
+    <breakpoint_rules converted="true" />
+    <ui_properties converted="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="AnnotationType" />
+        <option value="Class" />
+        <option value="JUnit5 Test Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ModuleEditorState">
+    <option name="LAST_EDITED_MODULE_NAME" />
+    <option name="LAST_EDITED_TAB_NAME" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2sA7Vzfk77e0AdW1a9uMib9wRrG" />
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state />
+    </entry>
+  </component>
+  <component name="ProjectReloadState">
+    <option name="STATE" value="0" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.BalanceApplication.executor": "Debug",
+    "JUnit.APIResponseTest.executor": "Run",
+    "JUnit.AccountControllerTest.executor": "Run",
+    "JUnit.AccountErrorCodeTest.executor": "Run",
+    "JUnit.AccountTest.executor": "Run",
+    "JUnit.BalanceLogTest.testBalanceLogBuilder.executor": "Run",
+    "JUnit.GeneralValidatorTest.executor": "Run",
+    "JUnit.LocalAccountServiceTest.executor": "Run",
+    "JUnit.LockContextTest.executor": "Run",
+    "JUnit.NewTransferCommandTest.executor": "Run",
+    "JUnit.OpsControllerTest.executor": "Run",
+    "JUnit.RedisLockServiceTest.executor": "Run",
+    "JUnit.RequiredValidatorTest.executor": "Run",
+    "JUnit.ResourceCommandTest.executor": "Run",
+    "JUnit.ResourceCommandTest.test_required_but_missing.executor": "Run",
+    "JUnit.TccTransactionServiceTest.executor": "Run",
+    "JUnit.TccTransactionServiceTest.testCancelTransaction.executor": "Run",
+    "JUnit.TccTransactionServiceTest.testCreateTransactionFailure.executor": "Run",
+    "JUnit.TccTransactionServiceTest.testFinishTransactionSuccess.executor": "Debug",
+    "JUnit.TransactionControllerTest.createTransaction_with_invalid_amount.executor": "Run",
+    "JUnit.TransactionControllerTest.executor": "Debug",
+    "JUnit.UnfinishedTransactionScannerTest.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "git-widget-placeholder": "master"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="io.evan.balance.transaction.service.tcc" />
+      <recent name="io.evan.balance.common" />
+      <recent name="io.evan.balance.service" />
+      <recent name="io.evan.balance" />
+      <recent name="io.evan.balance.command" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="io.evan.balance.transaction.service" />
+      <recent name="io.evan.balance.command" />
+    </key>
+    <key name="MoveInnerDialog.RECENTS_KEY">
+      <recent name="io.evan.balance.entity" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="io.evan.balance.transaction.service.tcc" />
+      <recent name="io.evan.balance.common.command.validator" />
+      <recent name="io.evan.balance.common" />
+      <recent name="io.evan.balance.account.domain" />
+      <recent name="io.evan.balance.common.command" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.UnfinishedTransactionScannerTest">
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method>
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
+      <Host>localhost</Host>
+      <Port>5050</Port>
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AccountTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="balance-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="io.evan.balance.account.domain.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="io.evan.balance.account.domain" />
+      <option name="MAIN_CLASS_NAME" value="io.evan.balance.account.domain.AccountTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <method v="2">
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LockContextTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="balance-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="io.evan.balance.common.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="io.evan.balance.common" />
+      <option name="MAIN_CLASS_NAME" value="io.evan.balance.common.LockContextTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <method v="2">
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RedisLockServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="balance-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="io.evan.balance.common.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="io.evan.balance.common" />
+      <option name="MAIN_CLASS_NAME" value="io.evan.balance.common.RedisLockServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <method v="2">
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RequiredValidatorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="balance-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="io.evan.balance.common.command.validator.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="io.evan.balance.common.command.validator" />
+      <option name="MAIN_CLASS_NAME" value="io.evan.balance.common.command.validator.RequiredValidatorTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <method v="2">
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UnfinishedTransactionScannerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="balance-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="io.evan.balance.transaction.service.tcc.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="io.evan.balance.transaction.service.tcc" />
+      <option name="MAIN_CLASS_NAME" value="io.evan.balance.transaction.service.tcc.UnfinishedTransactionScannerTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <method v="2">
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <method v="2">
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+      <option name="AUTO_RESTART" value="false" />
+      <method v="2">
+        <option name="BuildArtifacts" enabled="false" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.UnfinishedTransactionScannerTest" />
+        <item itemvalue="JUnit.LockContextTest" />
+        <item itemvalue="JUnit.RequiredValidatorTest" />
+        <item itemvalue="JUnit.RedisLockServiceTest" />
+        <item itemvalue="JUnit.AccountTest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration" maxAnnotateRevisions="500">
+    <option name="USER" value="" />
+    <option name="PASSWORD" value="" />
+    <option name="LAST_MERGED_REVISION" />
+    <option name="UPDATE_RUN_STATUS" value="false" />
+    <option name="MERGE_DRY_RUN" value="false" />
+    <option name="MERGE_DIFF_USE_ANCESTRY" value="true" />
+    <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
+    <option name="IGNORE_SPACES_IN_MERGE" value="false" />
+    <option name="DETECT_NESTED_COPIES" value="true" />
+    <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
+    <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
+    <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/io/evan/balance/ops/service/OpsService.java</url>
+          <line>31</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/io/evan/balance/transaction/service/tcc/TccTransactionServiceTest.java</url>
+          <line>63</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/io/evan/balance/transaction/service/tcc/TccTransactionService.java</url>
+          <line>181</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

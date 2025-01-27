@@ -1,0 +1,121 @@
+plugins {
+    id 'org.springframework.boot' version '3.1.0'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id 'java'
+    id 'jacoco'
+    id 'org.sonarqube' version '4.4.1.3373'
+}
+
+group = 'io.evan'
+version = '1.0-SNAPSHOT'
+sourceCompatibility = '17'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+bootJar {
+    mainClass = 'io.evan.balance.BalanceApplication'
+}
+
+allprojects {
+    apply plugin: 'idea'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'mysql:mysql-connector-java:8.0.33'
+
+    // RocketMQ dependencies
+    implementation 'org.apache.rocketmq:rocketmq-spring-boot-starter:2.2.3'
+    implementation 'org.apache.rocketmq:rocketmq-client:4.9.7'
+    implementation 'org.apache.rocketmq:rocketmq-common:4.9.7'
+    implementation 'org.apache.rocketmq:rocketmq-remoting:4.9.7'
+    
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+    useJUnitPlatform()
+    
+    // Enable JUnit Platform Console reporting
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+        showStackTraces true
+        showStandardStreams true
+        exceptionFormat "full"
+    }
+
+    // Generate HTML test report
+    reports {
+        html.required = true
+        junitXml.required = true
+    }
+
+    // Configure test failure handling
+    ignoreFailures = false
+    failFast = false
+    finalizedBy jacocoTestReport
+}
+
+// JaCoCo configuration for code coverage reporting
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        csv.required = false
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
+}
+
+// Enforce minimum code coverage thresholds
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.60  // 60% minimum coverage
+            }
+        }
+    }
+}
+
+// Make test report generation automatic after tests
+test.finalizedBy jacocoTestReport
+
+sonar {
+    properties {
+        property 'sonar.projectKey', 'io.evan.balance'
+        property 'sonar.sourceEncoding', 'UTF-8'
+        property 'sonar.coverage.jacoco.xmlReportPaths', 
+                 "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+        property 'sonar.java.coveragePlugin', 'jacoco'
+        property 'sonar.junit.reportPaths', 
+                 "${buildDir}/test-results/test"
+        property 'sonar.exclusions', [
+            '**/domain/**',
+            '**/model/**',
+            '**/entity/**',
+            '**/dto/**',
+            '**/BalanceApplication.java'
+        ].join(',')
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification

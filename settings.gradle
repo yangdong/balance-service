@@ -1,0 +1,8 @@
+rootProject.name = 'balance-service'
+
+def category(name, modules) {
+    modules.each {
+        include it
+        project(":$it").projectDir = file("$name/$it")
+    }
+}

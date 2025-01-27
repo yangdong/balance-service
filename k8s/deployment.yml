@@ -1,0 +1,131 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: balance-service
+  labels:
+    app: balance-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: balance-service
+  template:
+    metadata:
+      labels:
+        app: balance-service
+    spec:
+      containers:
+      - name: balance-service
+        image: balance-service:latest
+        ports:
+        - containerPort: 8080
+        env:
+          - name: JAVA_TOOL_OPTIONS
+            value: -Dfile.encoding=utf-8 -Dspring.config.location=/opt/balance-service/app/
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        readinessProbe:
+          httpGet:
+            path: /api/v1/ops/ping
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /api/v1/ops/ping
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 15
+        volumeMounts:
+          - mountPath: /opt/balance-service/app/
+            name: balance-service-config
+      volumes:
+        - configMap:
+            defaultMode: 420
+            name: balance-service-config
+          name: balance-service-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: balance-service-config
+data:
+  application.yaml: |
+    spring:
+      application:
+        name: balance-service
+      datasource:
+        url: jdbc:mysql://mysql:3306/balance_service?useSSL=false&allowPublicKeyRetrieval=true
+        username: root
+        password: 123
+        driver-class-name: com.mysql.cj.jdbc.Driver
+      jpa:
+        hibernate:
+          ddl-auto: update
+        show-sql: true
+        properties:
+          hibernate:
+            dialect: org.hibernate.dialect.MySQL8Dialect
+      redis:
+        host: redis-service
+        port: 6379
+      rocketmq:
+        name-server: rmqnamesrv-service:9876
+        producer:
+          group: balance-service_producer
+          send-message-timeout: 3000
+          retry-times-when-send-failed: 2
+          retry-times-when-send-async-failed: 0
+          compress-message-body-threshold: 4096
+          max-message-size: 4194304
+          retry-next-server: true
+        consumer:
+          group: balance-service_consumer
+          pull-batch-size: 10
+          topic: transaction_recovery
+          consume-from-where: CONSUME_FROM_LAST_OFFSET
+          thread-min: 20
+          thread-max: 20
+          consume-message-batch-max-size: 1
+          consume-timeout: 15
+      mvc:
+        servlet:
+          path: /api
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: balance-service
+spec:
+  selector:
+    app: balance-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: balance-service-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  rules:
+  - host: balance.io
+    http:
+      paths:
+      - path: /api
+        pathType: Prefix
+        backend:
+          serviceName: balance-service
+          servicePort: 80

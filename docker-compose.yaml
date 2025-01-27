@@ -1,0 +1,144 @@
+version: '3.8'
+services:
+  balance-service:
+    image: balance-service:latest
+    container_name: balance-service
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    ports:
+      - "8088:8080"
+    environment:
+      - JAVA_TOOL_OPTIONS=
+          -Xms4g
+          -Xmx4g
+          -XX:+UseG1GC
+          -XX:MaxGCPauseMillis=200
+          -Dfile.encoding=utf-8
+          -Dspring.config.location=file:/opt/balance-service/application.yml
+    volumes:
+      - ./config:/opt/balance-service
+    depends_on:
+      - mysql
+      - redis
+      - namesrv
+    networks:
+      - balance-network
+      - rocketmq
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    environment:
+      - MYSQL_ROOT_PASSWORD=123
+      - MYSQL_DATABASE=balance_service
+    ports:
+      - "13306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - balance-network
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.2'
+          memory: 256M
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - balance-network
+
+  namesrv:
+    image: apache/rocketmq:5.3.1
+    container_name: rmqnamesrv
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.2'
+          memory: 256M
+    ports:
+      - 9876:9876
+    networks:
+      - rocketmq
+    command: sh mqnamesrv
+
+  broker:
+    image: apache/rocketmq:5.3.1
+    container_name: rmqbroker
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+    ports:
+      - 10909:10909
+      - 10911:10911
+      - 10912:10912
+    environment:
+      - NAMESRV_ADDR=rmqnamesrv:9876
+    depends_on:
+      - namesrv
+    networks:
+      - rocketmq
+    command: sh mqbroker
+
+  proxy:
+    image: apache/rocketmq:5.3.1
+    container_name: rmqproxy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.2'
+          memory: 256M
+    networks:
+      - rocketmq
+    depends_on:
+      - broker
+      - namesrv
+    ports:
+      - 8081:8081
+    restart: on-failure
+    environment:
+      - NAMESRV_ADDR=rmqnamesrv:9876
+    command: sh mqproxy
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  balance-network:
+    driver: bridge
+  rocketmq:
+    driver: bridge
