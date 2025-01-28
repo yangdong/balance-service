@@ -202,9 +202,9 @@ export let options = {
 
 ### 4.1 Performance Metrics
 
-![alt text](k8s/assets/performance_test_result.png)
-![alt text](k8s/assets/service.png)
-![alt text](k8s/assets/mysql.png)
+![alt text](assets/performance_test_result.png)
+![alt text](assets/service.png)
+![alt text](assets/mysql.png)
 
 - Total Requests: 69,213
 - Average Response Time: 104.88ms
@@ -237,4 +237,4 @@ iterations.....................: 69213   144.122822/s
 
 # Test Reports
 
-![alt text](k8s/assets/test_report.png)
+![alt text](assets/test_report.png)
