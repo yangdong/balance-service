@@ -42,6 +42,7 @@ function help() {
   success "-stl | --stop-local: stop local environment using docker-compose" "none"
   success "-td | --tear-down: cleanup the entire database" "none"
   success "-mu | --mock-up: populate sample data" "none"
+  success "-pt | --performance-test: run performance test using k6" "none"
   exit 1
 }
 
@@ -72,6 +73,10 @@ for i in "$@"; do
     ;;
   -mu* | --mock-up*)
     action="mock_up"
+    shift # past argument=value
+    ;;
+  -pt* | --performance-test*)
+    action="performance_test"
     shift # past argument=value
     ;;
   -* | --*)
@@ -123,12 +128,14 @@ elif [ "$action" = "stop_local" ]; then
   success "Local environment stopped successfully" "time"
 elif [ "$action" = "tear_down" ]; then
   success "Cleaning up the entire database..." "time"
-  # Assuming a script or command is available to clean up the database
   curl -X POST http://localhost:8088/api/v1/ops/databases/cleanup
   success "Database cleanup completed successfully" "time"
 elif [ "$action" = "mock_up" ]; then
   success "Populating sample data..." "time"
-  # Assuming a script or command is available to populate sample data
   curl -X POST http://localhost:8088/api/v1/ops/accounts/samples
   success "Sample data populated successfully" "time"
+elif [ "$action" = "performance_test" ]; then
+  success "Running performance test..." "time"
+  k6 run performance_test.js
+  success "Performance test completed" "time"
 fi

@@ -57,12 +57,3 @@ export default function () {
 
     sleep(0.5);
 }
-
-// 测试完成后的报告处理
-export function handleSummary(data) {
-    return {
-        'stdout': textSummary(data, { indent: ' ', enableColors: true }),
-        'summary.html': htmlReport(data),
-        'summary.json': JSON.stringify(data),
-    };
-}
