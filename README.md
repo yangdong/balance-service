@@ -149,7 +149,7 @@ export let options = {
         { duration: '1m', target: 50 },
         { duration: '3m', target: 100 },
         { duration: '3m', target: 150 },
-        { duration: '1m', target: 0 },\
+        { duration: '1m', target: 0 },
     ],
     thresholds: {
         http_req_duration: ['p(95)<500'],
@@ -195,7 +195,7 @@ export let options = {
 
 - CPU: 2 cores
 - Memory: 4GB
-- Database: PostgreSQL 14
+- Database: MySQL 8.0
 - Connection Pool Size: 20
 
 ## 4. Test Results
