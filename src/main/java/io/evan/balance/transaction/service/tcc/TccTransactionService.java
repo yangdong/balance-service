@@ -13,6 +13,7 @@ import io.evan.balance.common.Result;
 import io.evan.balance.transaction.domain.Transaction;
 import io.evan.balance.transaction.domain.TransactionRepository;
 import io.evan.balance.transaction.error.TransactionErrorCode;
+import io.evan.balance.transaction.error.TransactionException;
 import io.evan.balance.transaction.service.TransactionService;
 import io.evan.balance.transaction.service.TransferRequest;
 import io.evan.balance.transaction.service.tcc.domain.TCCTransaction;
@@ -39,9 +40,9 @@ public class TccTransactionService implements TransactionService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void cancelTransaction(final TransactionContext transactionContext) {
+    public void cancelTransaction(final TransactionContext transactionContext) throws TransactionException {
         try {
-            if (transactionContext.getTransaction() == null) {
+            if (transactionContext == null || transactionContext.getTransaction() == null) {
                 return;
             }
 
@@ -50,7 +51,7 @@ public class TccTransactionService implements TransactionService {
                     transactionContext.getTransaction().getSourceAccountNumber()
             );
 
-            // 5. 更新事务状态
+            // 更新事务状态
             transactionContext.getTransaction().setStatus(Transaction.TransactionStatus.FAILED);
             transactionRepository.save(transactionContext.getTransaction());
 
@@ -64,25 +65,9 @@ public class TccTransactionService implements TransactionService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Result<Boolean, TransactionErrorCode> confirmTransaction(final TransactionContext context) {
+    public void confirmTransaction(final TransactionContext context) throws TransactionException {
         try {
-            // 1. 执行实际转账
-            // 2. 解冻并扣减来源账户
-            final Result<AccountInfo, AccountErrorCode> confirmFreezeResult =
-                    this.accountService.confirmFreeze(
-                            context.getTransactionId(),
-                            context.getTransaction().getSourceAccountNumber()
-                    );
-
-            if (confirmFreezeResult.hasError()) {
-                return switch (confirmFreezeResult.getError()) {
-                    case ACCOUNT_NOT_FOUND -> Result.error(TransactionErrorCode.SOURCE_ACCOUNT_NOT_FOUND);
-                    case INSUFFICIENT_BALANCE -> Result.error(TransactionErrorCode.INSUFFICIENT_BALANCE);
-                    default -> Result.error(TransactionErrorCode.TRANSACTION_STATUS_ERROR);
-                };
-            }
-
-            // 3. 增加目标账户余额
+            // 增加目标账户余额
             final Result<AccountInfo, AccountErrorCode> addBalanceResult =
                     this.accountService.addBalance(
                             context.getTransactionId(),
@@ -92,32 +77,48 @@ public class TccTransactionService implements TransactionService {
                     );
 
             if (addBalanceResult.hasError()) {
-                return switch (addBalanceResult.getError()) {
-                    case ACCOUNT_NOT_FOUND -> Result.error(TransactionErrorCode.TARGET_ACCOUNT_NOT_FOUND);
-                    default -> Result.error(TransactionErrorCode.TRANSACTION_STATUS_ERROR);
-                };
+                switch (addBalanceResult.getError()) {
+                    case ACCOUNT_NOT_FOUND -> throw new TransactionException(TransactionErrorCode.TARGET_ACCOUNT_NOT_FOUND);
+                    default -> throw new TransactionException(TransactionErrorCode.TRANSACTION_STATUS_ERROR);
+                }
             }
 
-            // 4. 更新事务状态
+            // 执行实际转账
+            // 解冻并扣减来源账户
+            final Result<AccountInfo, AccountErrorCode> confirmFreezeResult =
+                    this.accountService.confirmFreeze(
+                            context.getTransactionId(),
+                            context.getTransaction().getSourceAccountNumber()
+                    );
+
+            if (confirmFreezeResult.hasError()) {
+                switch (confirmFreezeResult.getError()) {
+                    case ACCOUNT_NOT_FOUND -> throw new TransactionException(TransactionErrorCode.SOURCE_ACCOUNT_NOT_FOUND);
+                    case INSUFFICIENT_BALANCE -> throw new TransactionException(TransactionErrorCode.INSUFFICIENT_BALANCE);
+                    default -> throw new TransactionException(TransactionErrorCode.TRANSACTION_STATUS_ERROR);
+                }
+            }
+
+            // 更新事务状态
             context.getTransaction().setStatus(Transaction.TransactionStatus.COMPLETED);
             transactionRepository.save(context.getTransaction());
 
             context.getTccTransaction().setStatus(TCCTransactionStatus.CONFIRMED);
             tccTransactionRepository.save(context.getTccTransaction());
-
-            return Result.success(true);
+        } catch (TransactionException e) {
+            throw new TransactionException(e.getErrorCode());
         } catch (Exception e) {
-            return Result.error(TransactionErrorCode.TRANSACTION_STATUS_ERROR);
+            throw new TransactionException(TransactionErrorCode.TRANSACTION_STATUS_ERROR);
         }
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public Result<TransactionContext, TransactionErrorCode> createTransaction(final TransferRequest request) {
+    @Transactional(rollbackFor = TransactionException.class)
+    public TransactionContext createTransaction(final TransferRequest request) throws TransactionException {
         final String transactionId = this.idGenerator.generate();
         final TransactionContext transactionContext = new TransactionContext(transactionId);
 
         try {
-            // 1. 记录TCC的Transaction状态
+            // 记录TCC的Transaction状态
             final TCCTransaction tccTransaction = tccTransactionRepository.save(
                     TCCTransaction
                             .builder()
@@ -128,7 +129,7 @@ public class TccTransactionService implements TransactionService {
 
             transactionContext.attachTCCTransaction(tccTransaction);
 
-            // 2. 记录交易
+            // 记录交易
             final Transaction transaction = transactionRepository.save(
                     Transaction.builder()
                             .sourceAccountNumber(request.getSourceAccount())
@@ -142,57 +143,49 @@ public class TccTransactionService implements TransactionService {
 
             transactionContext.attachTransaction(transaction);
 
-            return Result.success(transactionContext);
+            return transactionContext;
         } catch (Exception e) {
-            return Result.error(TransactionErrorCode.SYSTEM_ERROR);
+            throw new TransactionException(TransactionErrorCode.SYSTEM_ERROR);
         }
     }
 
-    public Result<Transaction, TransactionErrorCode> finishTransaction(final String transactionId) {
+    public Transaction finishTransaction(final String transactionId) throws TransactionException {
         final TransactionContext transactionContext = new TransactionContext(transactionId);
+        try {
+            this.transactionRepository.findByTransactionId(transactionId)
+                    .ifPresent(transactionContext::attachTransaction);
 
-        this.transactionRepository.findByTransactionId(transactionId)
-                .ifPresent(transactionContext::attachTransaction);
+            this.tccTransactionRepository.findByTransactionId(transactionId)
+                    .ifPresent(transactionContext::attachTCCTransaction);
 
-        this.tccTransactionRepository.findByTransactionId(transactionId)
-                .ifPresent(transactionContext::attachTCCTransaction);
+            tryTransaction(transactionContext);
+            confirmTransaction(transactionContext);
 
-        return finishTransaction(transactionContext);
-    }
-
-    public Result<Transaction, TransactionErrorCode> finishTransaction(final TransactionContext transactionContext) {
-        final Result<TransactionContext, TransactionErrorCode> tryResult = tryTransaction(transactionContext);
-        if (tryResult.hasError()) {
-            cancelTransaction(tryResult.getData());
-            return Result.error(tryResult.getError());
-        }
-
-        final Result<Boolean, TransactionErrorCode> confirmResult = confirmTransaction(transactionContext);
-
-        if (confirmResult.hasError()) {
+            return transactionContext.getTransaction();
+        } catch (TransactionException e) {
             cancelTransaction(transactionContext);
-            return Result.error(confirmResult.getError());
+            throw e;
         }
-
-        return Result.success(transactionContext.getTransaction());
     }
 
     @Override
-    public Result<Transaction, TransactionErrorCode> transfer(final TransferRequest request) {
-        final Result<TransactionContext, TransactionErrorCode> transactionResult = createTransaction(request);
+    public Transaction transfer(final TransferRequest request) throws TransactionException {
+        TransactionContext transactionContext = null;
+        try {
+            transactionContext = createTransaction(request);
+            tryTransaction(transactionContext);
+            confirmTransaction(transactionContext);
 
-        if (transactionResult.hasError()) {
-            return Result.error(transactionResult.getError());
+            return transactionContext.getTransaction();
+        } catch (TransactionException e) {
+            cancelTransaction(transactionContext);
+            throw new TransactionException(e.getErrorCode());
         }
-
-        final TransactionContext transactionContext = transactionResult.getData();
-
-        return finishTransaction(transactionContext);
     }
 
-    public Result<TransactionContext, TransactionErrorCode> tryTransaction(TransactionContext transactionContext) {
+    public void tryTransaction(TransactionContext transactionContext) throws TransactionException {
         try {
-            // 1. 冻结转出方资金
+            // 冻结转出方资金
             Result<AccountInfo, AccountErrorCode> frozen = accountService.freeze(
                     transactionContext.getTransactionId(),
                     transactionContext.getTransaction().getSourceAccountNumber(),
@@ -202,13 +195,10 @@ public class TccTransactionService implements TransactionService {
 
             var checkSourceAccountFrozenResult = checkSourceAccountFrozenResult(frozen);
             if (checkSourceAccountFrozenResult.hasError()) {
-                return new Result<>(transactionContext, checkSourceAccountFrozenResult.getError());
+                throw new TransactionException(checkSourceAccountFrozenResult.getError());
             }
-
-            return Result.success(transactionContext);
         } catch (Exception e) {
-            cancelTransaction(transactionContext);
-            return new Result<>(transactionContext, TransactionErrorCode.SYSTEM_ERROR);
+            throw new TransactionException(TransactionErrorCode.SYSTEM_ERROR);
         }
     }
 

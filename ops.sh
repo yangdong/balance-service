@@ -113,7 +113,7 @@ elif [ "$action" = "start_local" ]; then
   success "Waiting for services to be healthy..." "time"
   sleep 10
   
-  if docker-compose ps | grep -q "Exit"; then
+  if docker compose ps | grep -q "Exit"; then
     error "Some services failed to start. Please check docker-compose logs" "time"
     docker compose logs
     exit 1

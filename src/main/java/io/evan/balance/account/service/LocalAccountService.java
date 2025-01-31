@@ -80,11 +80,12 @@ public class LocalAccountService implements AccountService {
                                                         final String reason) {
         return accountRepository.findByAccountNumberForUpdate(accountNumber)
                 .map(account -> {
-                    if (account.getBalance().subtract(account.getFrozeBalance()).compareTo(amount) < 0) {
+                    final BigDecimal frozeBalance = account.getFrozeBalance();
+                    if (account.getBalance().subtract(frozeBalance).compareTo(amount) < 0) {
                         return Result.<AccountInfo, AccountErrorCode>error(AccountErrorCode.INSUFFICIENT_BALANCE);
                     }
 
-                    account.setFrozeBalance(account.getFrozeBalance().add(amount));
+                    account.setFrozeBalance(frozeBalance.add(amount));
                     accountRepository.save(account);
 
                     BalanceLog balanceLog = BalanceLog.builder()
@@ -94,8 +95,8 @@ public class LocalAccountService implements AccountService {
                             .type(BalanceLog.BalanceLogType.FREEZE)
                             .balanceBefore(account.getBalance())
                             .balanceAfter(account.getBalance())
-                            .frozenBefore(account.getFrozeBalance())
-                            .frozenAfter(account.getFrozeBalance().add(amount))
+                            .frozenBefore(frozeBalance)
+                            .frozenAfter(frozeBalance.add(amount))
                             .createTime(LocalDateTime.now())
                             .build();
 
@@ -125,8 +126,8 @@ public class LocalAccountService implements AccountService {
                             account.setFrozeBalance(account.getFrozeBalance().subtract(amount));
                             accountRepository.save(account);
 
-                            balanceLog.setStatus(BalanceLog.BalanceLogStatus.COMMITED);
-                            balanceLogRepository.delete(balanceLog);
+                            balanceLog.setStatus(BalanceLog.BalanceLogStatus.ROLLBACK);
+                            balanceLogRepository.save(balanceLog);
 
                             return Result.<AccountInfo, AccountErrorCode>success(new AccountInfo(account.getAccountNumber(), account.getBalance()));
                         })

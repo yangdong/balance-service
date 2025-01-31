@@ -11,7 +11,7 @@ import io.evan.balance.common.CommonErrorCode;
 import io.evan.balance.common.Result;
 import io.evan.balance.transaction.controller.command.NewTransferCommand;
 import io.evan.balance.transaction.domain.Transaction;
-import io.evan.balance.transaction.error.TransactionErrorCode;
+import io.evan.balance.transaction.error.TransactionException;
 import io.evan.balance.transaction.service.TransactionService;
 import io.evan.balance.transaction.service.TransferRequest;
 import io.evan.balance.transaction.service.TransferResponse;
@@ -35,14 +35,11 @@ public class TransactionController {
             );
         }
 
-        final Result<Transaction, TransactionErrorCode> transferResult = this.transactionService.transfer(resource.getData());
-
-        if (transferResult.hasError()) {
-            return ResponseEntity.badRequest().body(
-                    APIResponse.error(transferResult.getError())
-            );
+        try {
+            final Transaction transferred = this.transactionService.transfer(resource.getData());
+            return ResponseEntity.ok(APIResponse.success(new TransferResponse(transferred.getTransactionId(), true)));
+        } catch (TransactionException e) {
+            return ResponseEntity.badRequest().body(APIResponse.error(e.getErrorCode()));
         }
-
-        return ResponseEntity.ok(APIResponse.success(new TransferResponse(transferResult.getData().getTransactionId(), true)));
     }
 }

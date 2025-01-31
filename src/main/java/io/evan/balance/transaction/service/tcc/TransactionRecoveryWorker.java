@@ -4,6 +4,7 @@ import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 
 import io.evan.balance.common.LockService;
+import io.evan.balance.transaction.error.TransactionException;
 import io.evan.balance.transaction.service.TransactionRecoveryMessage;
 
 @RocketMQMessageListener(
@@ -27,6 +28,8 @@ public class TransactionRecoveryWorker implements RocketMQListener<TransactionRe
                 return;
             }
             this.tccTransactionService.finishTransaction(message.getTransactionId());
+        } catch (TransactionException e) {
+            throw new RuntimeException(e);
         } finally {
             this.lockService.unlock(key);
         }
